@@ -13,11 +13,15 @@ Gem::Specification.new do |gem|
   gem.description = 'Local asset-pipeline precompilation for Capstrano'
   gem.summary     = gem.description
 
-  gem.add_dependency 'capistrano'
+  gem.license     = 'MIT'
 
-  gem.executables = `git ls-files -- bin/*`.split("\n").map{|f| File.basename(f)}
-  gem.files       = `git ls-files`.split("\n")
-  gem.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
+  gem.add_dependency 'capistrano', '~> 2'
+
+  gem.files = %w(.yardopts LICENSE.md README.md Rakefile capistrano-local-precompile.gemspec)
+  gem.files += Dir.glob("lib/**/*.rb")
+  gem.files += Dir.glob("spec/**/*")
+
+  gem.test_files = Dir.glob("spec/**/*")
 
   gem.require_paths = ['lib']
 end
