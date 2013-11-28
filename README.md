@@ -2,6 +2,8 @@
 
 If your Rails apps are anything like mine, one of the slowest parts of your deployment is waiting for asset pipeline precompilation. It's sometimes so slow, it's painful. So I went searching for some solutions. [turbo-sprockets](https://github.com/ndbroadbent/turbo-sprockets-rails3) helped, but it's not a silver bullet.  This gem isn't a silver bullet either, but it can help.  Capistrano Local Precompile takes a different approach. It builds your assets locally and rsync's them to your web server(s).
 
+*Note: This gem is not yet compatible with Capistrano 3.*
+
 ## Usage
 
 Add capistrano-local-precompile to your Gemfile:
