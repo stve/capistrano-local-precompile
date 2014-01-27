@@ -3,16 +3,21 @@ require 'spec_helper'
 describe Capistrano::LocalPrecompile, "configuration" do
   before do
     @configuration = Capistrano::Configuration.new
+    @configuration.load do
+      def rails_env; 'production'; end
+      def rake; 'rake'; end
+      def asset_env; "RAILS_GROUPS=assets"; end
+    end
     Capistrano::LocalPrecompile.load_into(@configuration)
   end
 
   it "defines precompile_cmd" do
-    cmd = 'bundle exec rake assets:precompile'
+    cmd = 'RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile'
     expect(@configuration.fetch(:precompile_cmd)).to eq(cmd)
   end
 
   it "defines cleanexpired_cmd" do
-    cmd = 'bundle exec rake assets:clean_expired'
+    cmd = 'RAILS_ENV=production RAILS_GROUPS=assets rake assets:clean_expired'
     expect(@configuration.fetch(:cleanexpired_cmd)).to eq(cmd)
   end
 

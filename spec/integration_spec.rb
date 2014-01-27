@@ -3,6 +3,11 @@ require 'spec_helper'
 describe Capistrano::LocalPrecompile, "integration" do
   before do
     @configuration = Capistrano::Configuration.new
+    @configuration.load do
+      def rails_env; 'production'; end
+      def rake; 'rake'; end
+      def asset_env; "RAILS_GROUPS=assets"; end
+    end
     Capistrano::LocalPrecompile.load_into(@configuration)
   end
 
@@ -18,7 +23,7 @@ describe Capistrano::LocalPrecompile, "integration" do
   describe 'prepare task' do
     it 'invokes the precompile command' do
       expect(@configuration).to receive(:run_locally).
-        with('bundle exec rake assets:precompile').once
+        with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile').once
 
       @configuration.find_and_execute_task('deploy:assets:prepare')
     end
@@ -29,7 +34,7 @@ describe Capistrano::LocalPrecompile, "integration" do
 
     before do
       allow(@configuration).to receive(:run_locally).
-        with('bundle exec rake assets:precompile').once
+        with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile').once
       allow(@configuration).to receive(:run_locally).
         with('rm -rf public/assets').once
 
@@ -68,9 +73,9 @@ describe Capistrano::LocalPrecompile, "integration" do
         expect(@configuration).to receive(:run_locally).
           with('mv public/.assets public/assets').once
         expect(@configuration).to receive(:run_locally).
-          with('bundle exec rake assets:clean_expired').once
+          with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:clean_expired').once
         expect(@configuration).to receive(:run_locally).
-          with('bundle exec rake assets:precompile').once
+          with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile').once
 
         @configuration.find_and_execute_task('deploy:assets:prepare')
       end
