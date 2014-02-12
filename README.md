@@ -26,6 +26,14 @@ If you are using turbo-sprockets, just set it to enabled. Your asset will still 
 set :turbosprockets_enabled, true
 ```
 
+If you don't want to grant access to production's database from outside you can add:
+
+```ruby
+set :use_local_env, true
+```
+and local precompile will happen with a custom environment. For example if your production's environment is setup as 'production', enabling :use_local_env precompile will happen with 'production-local' environment.
+To make it work you will have to define the new environment but it's worth to don't open your production's database to everyone.
+
 Here's the full set of configurable options:
 
 ```ruby
@@ -36,6 +44,7 @@ set :rsync_cmd                  # default: "rsync -av"
 set :turbosprockets_enabled     # default: false
 set :turbosprockets_backup_dir  # default: "public/.assets"
 set :cleanexpired_cmd           # default: bundle exec rake assets:clean_expired
+set :use_local_env              # default: false
 ```
 
 ## Acknowledgement
