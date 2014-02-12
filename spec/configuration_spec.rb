@@ -12,7 +12,7 @@ describe Capistrano::LocalPrecompile, "configuration" do
   end
 
   it "defines cleanexpired_cmd" do
-    cmd = 'bundle exec rake assets:clean_expired'
+    cmd = "#{(@configuration.fetch(:use_local_env) ? "RAILS_ENV=#{@configuration.fetch(:rails_env)}-local " : '')}bundle exec rake assets:clean_expired"
     expect(@configuration.fetch(:cleanexpired_cmd)).to eq(cmd)
   end
 
