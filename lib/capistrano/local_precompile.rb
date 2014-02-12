@@ -5,9 +5,9 @@ module Capistrano
 
     def self.load_into(configuration)
       configuration.load do
-
-        set(:precompile_cmd)   { "#{fetch(:bundle_cmd, "bundle")} exec rake assets:precompile" }
-        set(:cleanexpired_cmd) { "#{fetch(:bundle_cmd, "bundle")} exec rake assets:clean_expired" }
+        set(:use_local_env)    { @use_local_env ? fetch(:use_local_env) : false}
+        set(:precompile_cmd)   { "#{(fetch(:use_local_env) ? "RAILS_ENV=#{fetch(:rails_env)}-local " : '')}#{fetch(:bundle_cmd, "bundle")} exec rake assets:precompile" }
+        set(:cleanexpired_cmd) { "#{(fetch(:use_local_env) ? "RAILS_ENV=#{fetch(:rails_env)}-local " : '')}#{fetch(:bundle_cmd, "bundle")} exec rake assets:clean_expired" }
         set(:assets_dir)       { "public/assets" }
 
         set(:turbosprockets_enabled)    { false }
@@ -32,9 +32,9 @@ module Capistrano
               if fetch(:turbosprockets_enabled)
                 run_locally "mkdir -p #{fetch(:turbosprockets_backup_dir)}"
                 run_locally "mv #{fetch(:turbosprockets_backup_dir)} #{fetch(:assets_dir)}"
-                run_locally "#{fetch(:cleanexpired_cmd)}"
+                run_locally "#{(fetch(:use_local_env) ? "RAILS_ENV=#{fetch(:rails_env)}-local " : '')}#{fetch(:cleanexpired_cmd)}"
               end
-              run_locally "#{fetch(:precompile_cmd)}"
+              run_locally "#{(fetch(:use_local_env) ? "RAILS_ENV=#{fetch(:rails_env)}-local " : '')}#{fetch(:precompile_cmd)}"
             end
 
             desc "Precompile assets locally and then rsync to app servers"
