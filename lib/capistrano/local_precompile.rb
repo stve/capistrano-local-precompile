@@ -42,7 +42,20 @@ module Capistrano
               servers = find_servers :roles => assets_role, :except => { :no_release => true }
               servers.each do |srvr|
                 run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{srvr}:#{release_path}/#{fetch(:assets_dir)}/"
+                run_locally "#{fetch(:rsync_cmd)} ./assets_manifest.* #{user}@#{srvr}:#{release_path}/"
               end
+
+              # Sync manifest filenames across servers if our manifest has a random filename
+              if shared_manifest_path =~ /manifest-.+\./
+                run <<-CMD.compact
+                  [ -e #{shared_manifest_path.shellescape} ] || mv -- #{shared_path.shellescape}/#{shared_assets_prefix}/manifest* #{shared_manifest_path.shellescape}
+                CMD
+              end
+
+              # Copy manifest to release root (for clean_expired task)
+              run <<-CMD.compact
+                cp -- #{shared_manifest_path.shellescape} #{current_release.to_s.shellescape}/assets_manifest#{File.extname(shared_manifest_path)}
+              CMD
             end
 
           end
