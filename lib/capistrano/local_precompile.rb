@@ -17,10 +17,6 @@ module Capistrano
         before "deploy:assets:precompile", "deploy:assets:prepare"
         after "deploy:assets:precompile", "deploy:assets:cleanup"
 
-        def local_manifest_path
-          @local_manifest_path ||= capture("ls #{assets_dir}/manifest*").strip
-        end
-
         namespace :deploy do
           namespace :assets do
 
@@ -43,6 +39,10 @@ module Capistrano
 
             desc "Precompile assets locally and then rsync to app servers"
             task :precompile, :only => { :primary => true }, :on_no_matching_servers => :continue do
+
+              local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
+              local_manifest_path.strip!
+
               servers = find_servers :roles => assets_role, :except => { :no_release => true }
               servers.each do |srvr|
                 run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{srvr}:#{release_path}/#{fetch(:assets_dir)}/"
