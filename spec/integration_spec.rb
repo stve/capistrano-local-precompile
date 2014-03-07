@@ -34,6 +34,8 @@ describe Capistrano::LocalPrecompile, "integration" do
 
     before do
       allow(@configuration).to receive(:run_locally).
+        with("ls public/assets/manifest*").and_return("public/assets/manifest.yml").once
+      allow(@configuration).to receive(:run_locally).
         with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile').once
       allow(@configuration).to receive(:run_locally).
         with('rm -rf public/assets').once
@@ -46,7 +48,7 @@ describe Capistrano::LocalPrecompile, "integration" do
     end
 
     it 'rsyncs the local asset files to the server' do
-      expect(@configuration).to receive(:run_locally).with(/rsync -av/).twice
+      expect(@configuration).to receive(:run_locally).with(/rsync -av/).exactly(4).times
 
       @configuration.find_and_execute_task('deploy:assets:precompile')
     end
