@@ -26,6 +26,12 @@ If you are using turbo-sprockets, just set it to enabled. Your asset will still 
 set :turbosprockets_enabled, true
 ```
 
+Ensure that assets_role variable is set in config/deploy.rb 
+
+```ruby
+set :assets_role, :app
+```
+
 Here's the full set of configurable options:
 
 ```ruby
