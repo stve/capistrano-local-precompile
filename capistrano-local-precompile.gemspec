@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
 
   gem.license     = 'MIT'
 
-  gem.add_dependency 'capistrano', '~> 2'
+  gem.add_dependency 'capistrano', '~> 2', '< 3'
 
   gem.files = %w(.yardopts LICENSE.md README.md Rakefile capistrano-local-precompile.gemspec)
   gem.files += Dir.glob("lib/**/*.rb")
