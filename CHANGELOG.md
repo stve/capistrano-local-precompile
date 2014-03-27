@@ -1,3 +1,7 @@
+# 0.0.4 / 2014-03-27
+
+* [BUGFIX] Tighten capistrano dependency to avoid issues with capistrano 3.0.0
+
 # 0.0.3 / 2014-03-07
 
 * [BUGFIX] Fix issue where capistrano clean_expired deletes all assets (#4)
