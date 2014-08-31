@@ -15,10 +15,17 @@ module Capistrano
         set(:rsync_cmd)                 { "rsync -av" }
 
         before "deploy:assets:precompile", "deploy:assets:prepare"
+        before "deploy:assets:symlink", "deploy:assets:remove"
+
         after "deploy:assets:precompile", "deploy:assets:cleanup"
 
         namespace :deploy do
           namespace :assets do
+
+            desc "remove manifest file from remote server"
+            task :remove, roles: [:app, :web] do
+              run "rm -f #{shared_path}/assets/manifest*.json"
+            end
 
             task :cleanup, :on_no_matching_servers => :continue  do
               if fetch(:turbosprockets_enabled)
