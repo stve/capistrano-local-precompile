@@ -53,34 +53,4 @@ describe Capistrano::LocalPrecompile, "integration" do
       @configuration.find_and_execute_task('deploy:assets:precompile')
     end
   end
-
-  context 'with turbosprockets enabled' do
-    before do
-      @configuration.set :turbosprockets_enabled, true
-    end
-
-    describe 'cleanup task' do
-      it 'moves assets to the configured turbosprockets backup dir' do
-        expect(@configuration).to receive(:run_locally).
-          with('mv public/assets public/.assets')
-
-        @configuration.find_and_execute_task('deploy:assets:cleanup')
-      end
-    end
-
-    describe 'prepare task' do
-      it 'invokes the precompile command' do
-        expect(@configuration).to receive(:run_locally).
-          with('mkdir -p public/.assets').once
-        expect(@configuration).to receive(:run_locally).
-          with('mv public/.assets public/assets').once
-        expect(@configuration).to receive(:run_locally).
-          with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:clean_expired').once
-        expect(@configuration).to receive(:run_locally).
-          with('RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile').once
-
-        @configuration.find_and_execute_task('deploy:assets:prepare')
-      end
-    end
-  end
 end

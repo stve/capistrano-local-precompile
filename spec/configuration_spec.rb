@@ -25,15 +25,6 @@ describe Capistrano::LocalPrecompile, "configuration" do
     expect(@configuration.fetch(:assets_dir)).to eq('public/assets')
   end
 
-  it "defines turbosprockets_enabled" do
-    expect(@configuration.fetch(:turbosprockets_enabled)).to be_false
-  end
-
-  it "defines turbosprockets_backup_dir" do
-    dir = 'public/.assets'
-    expect(@configuration.fetch(:turbosprockets_backup_dir)).to eq(dir)
-  end
-
   it "defines rsync_cmd" do
     expect(@configuration.fetch(:rsync_cmd)).to eq('rsync -av')
   end
