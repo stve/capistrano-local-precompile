@@ -29,6 +29,15 @@ describe Capistrano::LocalPrecompile, "integration" do
     end
   end
 
+  describe 'remove manifest task' do
+    it 'invokes the precompile command' do
+      expect(@configuration).to receive(:run).
+        with('rm -f public/assets/manifest*.json').once
+
+      @configuration.find_and_execute_task('deploy:assets:remove_manifest')
+    end
+  end
+
   describe 'precompile task' do
     let(:servers) { %w(10.0.1.1 10.0.1.2) }
 
