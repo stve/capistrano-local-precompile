@@ -11,6 +11,10 @@ describe Capistrano::LocalPrecompile, "configuration" do
     Capistrano::LocalPrecompile.load_into(@configuration)
   end
 
+  it "defines precompile_env" do
+    expect(@configuration.fetch(:precompile_env)).to eq('production')
+  end
+
   it "defines precompile_cmd" do
     cmd = 'RAILS_ENV=production RAILS_GROUPS=assets rake assets:precompile'
     expect(@configuration.fetch(:precompile_cmd)).to eq(cmd)
