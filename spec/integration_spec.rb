@@ -31,8 +31,11 @@ describe Capistrano::LocalPrecompile, "integration" do
 
   describe 'remove manifest task' do
     it 'invokes the precompile command' do
+      allow(@configuration).to receive(:shared_path).and_return('/tmp/shared')
+      allow(@configuration).to receive(:shared_assets_prefix).and_return('assets')
+
       expect(@configuration).to receive(:run).
-        with('rm -f public/assets/manifest*.json').once
+        with('rm -f /tmp/shared/assets/manifest*').once
 
       @configuration.find_and_execute_task('deploy:assets:remove_manifest')
     end

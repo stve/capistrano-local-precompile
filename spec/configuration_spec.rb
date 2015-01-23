@@ -47,4 +47,9 @@ describe Capistrano::LocalPrecompile, "configuration" do
     expect(@configuration).to callback('deploy:assets:cleanup').
       after('deploy:assets:precompile')
   end
+
+  it "performs deploy:assets:remove_manifest before deploy:assets:symlink" do
+    expect(@configuration).to callback('deploy:assets:remove_manifest').
+                                  before('deploy:assets:symlink')
+  end
 end
