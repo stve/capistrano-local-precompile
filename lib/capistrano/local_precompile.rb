@@ -22,7 +22,7 @@ module Capistrano
 
             desc "remove manifest file from remote server"
             task :remove_manifest do
-              run "rm -f #{fetch(:assets_dir)}/manifest*.json"
+              run "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
             end
 
             task :cleanup, :on_no_matching_servers => :continue  do
