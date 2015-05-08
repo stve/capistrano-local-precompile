@@ -22,7 +22,7 @@ module Capistrano
 
             desc "remove manifest file from remote server"
             task :remove_manifest do
-              run "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
+              run "rm -f #{shared_path}/#{shared_assets_prefix}/.sprockets-manifest*"
             end
 
             task :cleanup, :on_no_matching_servers => :continue  do
@@ -36,7 +36,7 @@ module Capistrano
             desc "Precompile assets locally and then rsync to app servers"
             task :precompile, :only => { :primary => true }, :on_no_matching_servers => :continue do
 
-              local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
+              local_manifest_path = run_locally "ls #{assets_dir}/.sprockets-manifest*"
               local_manifest_path.strip!
 
               servers = find_servers :roles => assets_role, :except => { :no_release => true }
