@@ -27,12 +27,12 @@ namespace :deploy do
     end
 
     desc "Remove all local precompiled assets"
-    task :cleanup, :on_no_matching_servers => :continue  do
+    task :cleanup do
       run_locally "rm -rf #{fetch(:assets_dir)}"
     end
 
     desc "Actually precompile the assets locally"
-    task :prepare, :on_no_matching_servers => :continue  do
+    task :prepare do
       run_locally do
         with rails_env: fetch(:stage) do
           execute "#{fetch(:precompile_cmd)}"
@@ -41,7 +41,7 @@ namespace :deploy do
     end
 
     desc "Performs rsync to app servers"
-    task :precompile, :only => { :primary => true }, :on_no_matching_servers => :continue do
+    task :precompile, :only => { :primary => true } do
       on roles(fetch(:assets_role)) do
 
         local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
