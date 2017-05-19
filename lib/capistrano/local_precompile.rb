@@ -10,7 +10,7 @@ module Capistrano
         set(:precompile_cmd)   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:precompile" }
         set(:cleanexpired_cmd) { "RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} #{rake} assets:clean_expired" }
         set(:assets_dir)       { "public/assets" }
-        set(:rsync_cmd)        { "rsync -av" }
+        set(:rsync_cmd)        { "rsync -av --delete" }
 
         before "deploy:assets:precompile", "deploy:assets:prepare"
         before "deploy:assets:symlink", "deploy:assets:remove_manifest"
@@ -18,31 +18,42 @@ module Capistrano
         after "deploy:assets:precompile", "deploy:assets:cleanup"
 
         namespace :deploy do
+
+          # Clear existing task so we can replace it rather than "add" to it.
+          Rake::Task["deploy:compile_assets"].clear
+
           namespace :assets do
 
-            desc "remove manifest file from remote server"
+            desc "Remove manifest file from remote server"
             task :remove_manifest do
-              run "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
+              with rails_env: fetch(:assets_dir) do
+                execute "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
+              end
             end
 
+            desc "Remove all local precompiled assets"
             task :cleanup, :on_no_matching_servers => :continue  do
               run_locally "rm -rf #{fetch(:assets_dir)}"
             end
 
+            desc "Actually precompile the assets locally"
             task :prepare, :on_no_matching_servers => :continue  do
-              run_locally "#{fetch(:precompile_cmd)}"
+              run_locally do
+                with rails_env: fetch(:stage) do
+                  execute "#{fetch(:precompile_cmd)}"
+                end
+              end
             end
 
-            desc "Precompile assets locally and then rsync to app servers"
+            desc "Performs rsync to app servers"
             task :precompile, :only => { :primary => true }, :on_no_matching_servers => :continue do
+              on roles(fetch(:assets_role)) do
 
-              local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
-              local_manifest_path.strip!
+                local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
+                local_manifest_path.strip!
 
-              servers = find_servers :roles => assets_role, :except => { :no_release => true }
-              servers.each do |srvr|
-                run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{srvr}:#{release_path}/#{fetch(:assets_dir)}/"
-                run_locally "#{fetch(:rsync_cmd)} ./#{local_manifest_path} #{user}@#{srvr}:#{release_path}/assets_manifest#{File.extname(local_manifest_path)}"
+                run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{server}:#{release_path}/#{fetch(:assets_dir)}/"
+                run_locally "#{fetch(:rsync_cmd)} ./#{local_manifest_path} #{user}@#{server}:#{release_path}/assets_manifest#{File.extname(local_manifest_path)}"
               end
             end
           end
