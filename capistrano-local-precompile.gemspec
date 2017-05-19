@@ -5,7 +5,7 @@ require 'capistrano-local-precompile/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'capistrano-local-precompile'
-  gem.version     = 1.0.0
+  gem.version     = '1.0.0'
   gem.homepage    = 'https://github.com/spagalloco/capistrano-local-precompile'
 
   gem.author      = "Steve Agalloco, Tom Caflisch"
