@@ -7,7 +7,7 @@ namespace :load do
     set(:rsync_cmd)        { "rsync -av --delete" }
 
     before "deploy:assets:precompile", "deploy:assets:prepare"
-    before "deploy:assets:symlink", "deploy:assets:remove_manifest"
+    #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
 
     after "deploy:assets:precompile", "deploy:assets:cleanup"
   end
@@ -19,12 +19,12 @@ namespace :deploy do
 
   namespace :assets do
 
-    desc "Remove manifest file from remote server"
-    task :remove_manifest do
-      with rails_env: fetch(:assets_dir) do
-        execute "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
-      end
-    end
+    # desc "Remove manifest file from remote server"
+    # task :remove_manifest do
+    #   with rails_env: fetch(:assets_dir) do
+    #     execute "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
+    #   end
+    # end
 
     desc "Remove all local precompiled assets"
     task :cleanup do
