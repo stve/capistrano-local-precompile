@@ -41,7 +41,7 @@ namespace :deploy do
     end
 
     desc "Performs rsync to app servers"
-    task :precompile, :only => { :primary => true } do
+    task :precompile do
       on roles(fetch(:assets_role)) do
 
         local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
