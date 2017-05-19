@@ -5,11 +5,11 @@ require 'capistrano-local-precompile/version'
 
 Gem::Specification.new do |gem|
   gem.name        = 'capistrano-local-precompile'
-  gem.version     = CapistranoLocalPrecompile::VERSION
+  gem.version     = 1.0.0
   gem.homepage    = 'https://github.com/spagalloco/capistrano-local-precompile'
 
-  gem.author      = "Steve Agalloco"
-  gem.email       = 'steve.agalloco@gmail.com'
+  gem.author      = "Steve Agalloco, Tom Caflisch"
+  gem.email       = 'steve.agalloco@gmail.com, tomcaflisch@gmail.com'
   gem.description = 'Local asset-pipeline precompilation for Capstrano'
   gem.summary     = gem.description
 

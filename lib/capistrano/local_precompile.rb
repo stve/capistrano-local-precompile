@@ -1,69 +1,55 @@
-require 'capistrano'
+namespace :load do
+  task :defaults do
+    set(:precompile_env)   { rails_env }
+    set(:precompile_cmd)   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:precompile" }
+    set(:cleanexpired_cmd) { "RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} #{rake} assets:clean_expired" }
+    set(:assets_dir)       { "public/assets" }
+    set(:rsync_cmd)        { "rsync -av --delete" }
 
-module Capistrano
-  module LocalPrecompile
+    before "deploy:assets:precompile", "deploy:assets:prepare"
+    before "deploy:assets:symlink", "deploy:assets:remove_manifest"
 
-    def self.load_into(configuration)
-      configuration.load do
+    after "deploy:assets:precompile", "deploy:assets:cleanup"
+  end
+end
 
-        set(:precompile_env)   { rails_env }
-        set(:precompile_cmd)   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:precompile" }
-        set(:cleanexpired_cmd) { "RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} #{rake} assets:clean_expired" }
-        set(:assets_dir)       { "public/assets" }
-        set(:rsync_cmd)        { "rsync -av --delete" }
+namespace :deploy do
+  # Clear existing task so we can replace it rather than "add" to it.
+  Rake::Task["deploy:compile_assets"].clear
 
-        before "deploy:assets:precompile", "deploy:assets:prepare"
-        before "deploy:assets:symlink", "deploy:assets:remove_manifest"
+  namespace :assets do
 
-        after "deploy:assets:precompile", "deploy:assets:cleanup"
+    desc "Remove manifest file from remote server"
+    task :remove_manifest do
+      with rails_env: fetch(:assets_dir) do
+        execute "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
+      end
+    end
 
-        namespace :deploy do
+    desc "Remove all local precompiled assets"
+    task :cleanup, :on_no_matching_servers => :continue  do
+      run_locally "rm -rf #{fetch(:assets_dir)}"
+    end
 
-          # Clear existing task so we can replace it rather than "add" to it.
-          Rake::Task["deploy:compile_assets"].clear
-
-          namespace :assets do
-
-            desc "Remove manifest file from remote server"
-            task :remove_manifest do
-              with rails_env: fetch(:assets_dir) do
-                execute "rm -f #{shared_path}/#{shared_assets_prefix}/manifest*"
-              end
-            end
-
-            desc "Remove all local precompiled assets"
-            task :cleanup, :on_no_matching_servers => :continue  do
-              run_locally "rm -rf #{fetch(:assets_dir)}"
-            end
-
-            desc "Actually precompile the assets locally"
-            task :prepare, :on_no_matching_servers => :continue  do
-              run_locally do
-                with rails_env: fetch(:stage) do
-                  execute "#{fetch(:precompile_cmd)}"
-                end
-              end
-            end
-
-            desc "Performs rsync to app servers"
-            task :precompile, :only => { :primary => true }, :on_no_matching_servers => :continue do
-              on roles(fetch(:assets_role)) do
-
-                local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
-                local_manifest_path.strip!
-
-                run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{server}:#{release_path}/#{fetch(:assets_dir)}/"
-                run_locally "#{fetch(:rsync_cmd)} ./#{local_manifest_path} #{user}@#{server}:#{release_path}/assets_manifest#{File.extname(local_manifest_path)}"
-              end
-            end
-          end
+    desc "Actually precompile the assets locally"
+    task :prepare, :on_no_matching_servers => :continue  do
+      run_locally do
+        with rails_env: fetch(:stage) do
+          execute "#{fetch(:precompile_cmd)}"
         end
       end
     end
 
-  end
-end
+    desc "Performs rsync to app servers"
+    task :precompile, :only => { :primary => true }, :on_no_matching_servers => :continue do
+      on roles(fetch(:assets_role)) do
 
-if Capistrano::Configuration.instance
-  Capistrano::LocalPrecompile.load_into(Capistrano::Configuration.instance)
+        local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
+        local_manifest_path.strip!
+
+        run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{server}:#{release_path}/#{fetch(:assets_dir)}/"
+        run_locally "#{fetch(:rsync_cmd)} ./#{local_manifest_path} #{user}@#{server}:#{release_path}/assets_manifest#{File.extname(local_manifest_path)}"
+      end
+    end
+  end
 end
