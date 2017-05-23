@@ -34,7 +34,7 @@ namespace :deploy do
 
     desc "Remove all local precompiled assets"
     task :cleanup do
-      run_locally 'rm -rf', fetch(:assets_dir)}
+      run_locally "rm -rf", fetch(:assets_dir)}
     end
 
     desc "Actually precompile the assets locally"
