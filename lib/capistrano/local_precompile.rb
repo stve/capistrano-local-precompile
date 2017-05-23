@@ -31,7 +31,11 @@ namespace :deploy do
 
     desc "Remove all local precompiled assets"
     task :cleanup do
-      run_locally "rm -rf", fetch(:assets_dir)
+      run_locally do
+        with rails_env: fetch(:precompile_env) do
+          execute "rm -rf", fetch(:assets_dir)
+        end
+      end
     end
 
     desc "Actually precompile the assets locally"
