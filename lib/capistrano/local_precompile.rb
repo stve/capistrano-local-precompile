@@ -1,6 +1,6 @@
 namespace :load do
   task :defaults do
-    set :rake,             "bundle exec rake"
+    #set :rake,             "bundle exec rake"
     set :precompile_env,   fetch(:rails_env)
     set :precompile_cmd,   "assets:precompile"
     #set :cleanexpired_cmd, "RAILS_ENV=#{fetch(:precompile_env).to_s.shellescape} #{fetch(:rake)} assets:clean_expired"
