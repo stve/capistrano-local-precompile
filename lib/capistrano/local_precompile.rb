@@ -7,7 +7,7 @@ namespace :load do
     set :assets_dir,       "public/assets"
     set :rsync_cmd,        "rsync -av --delete"
 
-    before "deploy:updated", "deploy:assets:prepare"
+    after "bundler:install", "deploy:assets:prepare"
     #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
 
     after "deploy:assets:prepare", "deploy:assets:cleanup"
