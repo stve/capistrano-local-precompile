@@ -1,4 +1,4 @@
-require 'bundler/capistrano'
+require 'capistrano/bundler'
 
 
 namespace :load do
