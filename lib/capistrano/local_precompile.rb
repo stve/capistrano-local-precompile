@@ -2,6 +2,23 @@ require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rvm'
 
+
+namespace :load do
+  task :defaults do
+    #set :rake,             "bundle exec rake"
+    set :precompile_env,   fetch(:rails_env) || 'production'
+    set :precompile_cmd,   "assets:precompile"
+    #set :cleanexpired_cmd, "RAILS_ENV=#{fetch(:precompile_env).to_s.shellescape} #{fetch(:rake)} assets:clean_expired"
+    set :assets_dir,       "public/assets"
+    set :rsync_cmd,        "rsync -av --delete"
+
+    after "bundler:install", "deploy:assets:prepare"
+    #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
+
+    after "deploy:assets:prepare", "deploy:assets:cleanup"
+  end
+end
+
 namespace :deploy do
   # Clear existing task so we can replace it rather than "add" to it.
   Rake::Task["deploy:compile_assets"].clear
@@ -43,21 +60,5 @@ namespace :deploy do
         run_locally "#{fetch(:rsync_cmd)} ./#{local_manifest_path} #{user}@#{server}:#{release_path}/assets_manifest#{File.extname(local_manifest_path)}"
       end
     end
-  end
-end
-
-namespace :load do
-  task :defaults do
-    #set :rake,             "bundle exec rake"
-    set :precompile_env,   fetch(:rails_env)
-    set :precompile_cmd,   "assets:precompile"
-    #set :cleanexpired_cmd, "RAILS_ENV=#{fetch(:precompile_env).to_s.shellescape} #{fetch(:rake)} assets:clean_expired"
-    set :assets_dir,       "public/assets"
-    set :rsync_cmd,        "rsync -av --delete"
-
-    after "bundler:install", "deploy:assets:prepare"
-    #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
-
-    after "deploy:assets:prepare", "deploy:assets:cleanup"
   end
 end
