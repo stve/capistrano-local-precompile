@@ -1,8 +1,8 @@
 namespace :load do
   task :defaults do
-    set :precompile_env,   fetch(:rails_env)
+    set :precompile_env,   fetch(:stage)
     set :precompile_cmd,   "RAILS_ENV=#{fetch(:precompile_env).to_s.shellescape} #{fetch(:asset_env)} #{fetch(:rake)} assets:precompile"
-    set :cleanexpired_cmd, "RAILS_ENV=#{fetch(:rails_env).to_s.shellescape} #{fetch(:asset_env)} #{fetch(:rake)} assets:clean_expired"
+    set :cleanexpired_cmd, "RAILS_ENV=#{fetch(:precompile_env).to_s.shellescape} #{fetch(:asset_env)} #{fetch(:rake)} assets:clean_expired"
     set :assets_dir,       "public/assets"
     set :rsync_cmd,        "rsync -av --delete"
 
