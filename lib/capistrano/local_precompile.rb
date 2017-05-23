@@ -1,4 +1,5 @@
 require 'capistrano/bundler'
+require 'capistrano/rails/assets'
 
 
 namespace :load do
@@ -19,7 +20,7 @@ end
 
 namespace :deploy do
   # Clear existing task so we can replace it rather than "add" to it.
-  #Rake::Task["deploy:compile_assets"].clear
+  Rake::Task["deploy:compile_assets"].clear
 
   namespace :assets do
 
