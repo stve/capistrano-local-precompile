@@ -1,10 +1,10 @@
 namespace :load do
   task :defaults do
-    set(:precompile_env)   { rails_env }
-    set(:precompile_cmd)   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:precompile" }
-    set(:cleanexpired_cmd) { "RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} #{rake} assets:clean_expired" }
-    set(:assets_dir)       { "public/assets" }
-    set(:rsync_cmd)        { "rsync -av --delete" }
+    set :precompile_env,   fetch(:rails_env)
+    set :precompile_cmd,   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:precompile" }
+    set :cleanexpired_cmd, { "RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} #{rake} assets:clean_expired" }
+    set :assets_dir,       { "public/assets" }
+    set :rsync_cmd,        { "rsync -av --delete" }
 
     before "deploy:updated", "deploy:assets:prepare"
     #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
