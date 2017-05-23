@@ -41,9 +41,7 @@ namespace :deploy do
     task :prepare do
       run_locally do
         with rails_env: fetch(:precompile_env) do
-          sh 'echo PWD = '
-          sh 'pwd'
-          rake fetch(:precompile_cmd)
+          execute :bundle, "exec rake", fetch(:precompile_cmd)
         end
       end
     end
