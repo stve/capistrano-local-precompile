@@ -41,7 +41,9 @@ namespace :deploy do
     task :prepare do
       run_locally do
         with rails_env: fetch(:precompile_env) do
-          execute :bundle, "exec rake", fetch(:precompile_cmd)
+          #execute :bundle, "exec rake", fetch(:precompile_cmd)
+          execute "RAILS_ENV=production bundle exec rake assets:clobber"
+          execute "RAILS_ENV=production bundle exec rake assets:precompile"
         end
       end
     end
