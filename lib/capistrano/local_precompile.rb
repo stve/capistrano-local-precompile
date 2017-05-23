@@ -1,6 +1,6 @@
-require 'capistrano/bundler'
+#require 'capistrano/bundler'
 require 'capistrano/rails/assets'
-require 'capistrano/rvm'
+#require 'capistrano/rvm'
 
 
 namespace :load do
