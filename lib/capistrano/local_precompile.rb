@@ -1,3 +1,6 @@
+require 'bundler/capistrano'
+
+
 namespace :load do
   task :defaults do
     #set :rake,             "bundle exec rake"
