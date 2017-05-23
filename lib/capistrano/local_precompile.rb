@@ -5,10 +5,7 @@ require 'capistrano/rvm'
 
 namespace :load do
   task :defaults do
-    #set :rake,             "bundle exec rake"
     set :precompile_env,   fetch(:rails_env) || 'production'
-    set :precompile_cmd,   "assets:precompile"
-    #set :cleanexpired_cmd, "RAILS_ENV=#{fetch(:precompile_env).to_s.shellescape} #{fetch(:rake)} assets:clean_expired"
     set :assets_dir,       "public/assets"
     set :rsync_cmd,        "rsync -av --delete"
 
@@ -34,17 +31,15 @@ namespace :deploy do
 
     desc "Remove all local precompiled assets"
     task :cleanup do
-      run_locally "rm -rf", fetch(:assets_dir)}
+      run_locally "rm -rf", fetch(:assets_dir)
     end
 
     desc "Actually precompile the assets locally"
     task :prepare do
       run_locally do
         with rails_env: fetch(:precompile_env) do
-        #with rails_env: "production" do
-          execute :bundle, "exec rake", fetch(:precompile_cmd)
-          #execute "RAILS_ENV=production bundle exec rake assets:clobber"
-          #execute "RAILS_ENV=production bundle exec rake assets:precompile"
+          execute :bundle, "exec rake assets:clean"
+          execute :bundle, "exec rake assets:precompile"
         end
       end
     end
