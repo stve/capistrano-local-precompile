@@ -20,22 +20,12 @@ Then add the following line to your `Capfile`:
 require 'capistrano/local_precompile'
 ```
 
-If you are using turbo-sprockets, just set it to enabled. Your asset will still compile locally, but they'll use turbosprockets to do so:
-
-```ruby
-set :turbosprockets_enabled, true
-```
-
 Here's the full set of configurable options:
 
 ```ruby
-set :precompile_cmd             # default: bundle exec rake assets:precompile
+set :precompile_env             # default: fetch(:rails_env) || 'production'
 set :assets_dir                 # default: "public/assets"
-set :rsync_cmd                  # default: "rsync -av"
-
-set :turbosprockets_enabled     # default: false
-set :turbosprockets_backup_dir  # default: "public/.assets"
-set :cleanexpired_cmd           # default: bundle exec rake assets:clean_expired
+set :rsync_cmd                  # default: "rsync -av --delete"
 ```
 
 ## Acknowledgement
@@ -51,4 +41,4 @@ Pull requests welcome: fork, make a topic branch, commit (squash when possible) 
 
 ## Copyright
 
-Copyright (c) 2013 Steve Agalloco. See [LICENSE](LICENSE.md) for detail
+Copyright (c) 2017 Steve Agalloco / Tom Caflisch. See [LICENSE](LICENSE.md) for detail

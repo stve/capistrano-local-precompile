@@ -1,7 +1,4 @@
-#require 'capistrano/bundler'
 require 'capistrano/rails/assets'
-#require 'capistrano/rvm'
-
 
 namespace :load do
   task :defaults do
@@ -11,7 +8,6 @@ namespace :load do
 
     after "bundler:install", "deploy:assets:prepare"
     #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
-
     after "deploy:assets:prepare", "deploy:assets:cleanup"
   end
 end
