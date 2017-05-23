@@ -36,7 +36,7 @@ namespace :deploy do
     task :prepare do
       run_locally do
         with rails_env: fetch(:precompile_env) do
-          execute :rake "#{fetch(:precompile_cmd)}"
+          execute :rake, "#{fetch(:precompile_cmd)}"
         end
       end
     end
