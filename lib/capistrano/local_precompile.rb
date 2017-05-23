@@ -6,10 +6,10 @@ namespace :load do
     set(:assets_dir)       { "public/assets" }
     set(:rsync_cmd)        { "rsync -av --delete" }
 
-    before "deploy:assets:precompile", "deploy:assets:prepare"
+    before "deploy:compile_assets", "deploy:assets:prepare"
     #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
 
-    after "deploy:assets:precompile", "deploy:assets:cleanup"
+    after "deploy:compile_assets", "deploy:assets:cleanup"
   end
 end
 
