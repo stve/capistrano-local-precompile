@@ -2,40 +2,30 @@
 
 If your Rails apps are anything like mine, one of the slowest parts of your deployment is waiting for asset pipeline precompilation. It's sometimes so slow, it's painful. So I went searching for some solutions. [turbo-sprockets](https://github.com/ndbroadbent/turbo-sprockets-rails3) helped, but it's not a silver bullet.  This gem isn't a silver bullet either, but it can help.  Capistrano Local Precompile takes a different approach. It builds your assets locally and rsync's them to your web server(s).
 
-*Note: This gem is not yet compatible with Capistrano 3.*
-
 ## Usage
 
 Add capistrano-local-precompile to your Gemfile:
 
 ```ruby
 group :development do
-  gem 'capistrano-local-precompile', require: false
+  # Capistrano v2 should use '~> 0.0.5'
+  # Capistrano v3 should use '~> 1.0.0'
+  gem 'capistrano-local-precompile', '~> 1.0.0', require: false
 end
 ```
 
-Then add the following line to your `deploy.rb`:
+Then add the following line to your `Capfile`:
 
 ```ruby
 require 'capistrano/local_precompile'
 ```
 
-If you are using turbo-sprockets, just set it to enabled. Your asset will still compile locally, but they'll use turbosprockets to do so:
-
-```ruby
-set :turbosprockets_enabled, true
-```
-
 Here's the full set of configurable options:
 
 ```ruby
-set :precompile_cmd             # default: bundle exec rake assets:precompile
+set :precompile_env             # default: fetch(:rails_env) || 'production'
 set :assets_dir                 # default: "public/assets"
-set :rsync_cmd                  # default: "rsync -av"
-
-set :turbosprockets_enabled     # default: false
-set :turbosprockets_backup_dir  # default: "public/.assets"
-set :cleanexpired_cmd           # default: bundle exec rake assets:clean_expired
+set :rsync_cmd                  # default: "rsync -av --delete"
 ```
 
 ## Acknowledgement
@@ -51,4 +41,4 @@ Pull requests welcome: fork, make a topic branch, commit (squash when possible) 
 
 ## Copyright
 
-Copyright (c) 2013 Steve Agalloco. See [LICENSE](LICENSE.md) for detail
+Copyright (c) 2017 Steve Agalloco / Tom Caflisch. See [LICENSE](LICENSE.md) for detail

@@ -1,3 +1,11 @@
+# 0.1.0 / 2017-05-20
+
+* [ENHANCEMENT] Compatible with Capistrano v3
+
+# 0.0.5 / ?
+
+* ?
+
 # 0.0.4 / 2014-03-27
 
 * [BUGFIX] Tighten capistrano dependency to avoid issues with capistrano 3.0.0

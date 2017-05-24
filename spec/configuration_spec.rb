@@ -30,7 +30,7 @@ describe Capistrano::LocalPrecompile, "configuration" do
   end
 
   it "defines rsync_cmd" do
-    expect(@configuration.fetch(:rsync_cmd)).to eq('rsync -av')
+    expect(@configuration.fetch(:rsync_cmd)).to eq('rsync -av --delete')
   end
 
   it "performs deploy:assets:prepare before deploy:assets:precompile" do
