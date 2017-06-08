@@ -38,8 +38,8 @@ namespace :deploy do
     task :prepare do
       run_locally do
         with rails_env: fetch(:precompile_env) do
-          execute :rake, "assets:clean"
-          execute :bundle, "exec rake assets:precompile"
+          execute "rake assets:clean"
+          execute "rake assets:precompile"
         end
       end
     end
