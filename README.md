@@ -9,7 +9,7 @@ Add capistrano-local-precompile to your Gemfile:
 ```ruby
 group :development do
   # Capistrano v2 should use '~> 0.0.5'
-  # Capistrano v3 should use '~> 1.0.0'
+  # Capistrano v3 should use '~> 1.0.1'
   gem 'capistrano-local-precompile', '~> 1.0.0', require: false
 end
 ```
