@@ -1,3 +1,7 @@
+# 1.1.0 / 2017-09-18
+## Added
+- Support for [Webpacker](https://github.com/rails/webpacker ) gem
+
 # 0.1.0 / 2017-05-20
 
 * [ENHANCEMENT] Compatible with Capistrano v3
