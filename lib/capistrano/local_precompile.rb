@@ -6,6 +6,7 @@ namespace :load do
     set :assets_dir,       "public/assets"
     set :packs_dir,        "public/packs"    
     set :rsync_cmd,        "rsync -av --delete"
+    set :assets_role,      "web"
 
     after "bundler:install", "deploy:assets:prepare"
     #before "deploy:assets:symlink", "deploy:assets:remove_manifest"
@@ -47,14 +48,11 @@ namespace :deploy do
 
     desc "Performs rsync to app servers"
     task :precompile do
-      on roles(fetch(:assets_role)) do
-
-        local_manifest_path = run_locally "ls #{assets_dir}/manifest*"
-        local_manifest_path.strip!
-
-        run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{user}@#{server}:#{release_path}/#{fetch(:assets_dir)}/"
-        run_locally "#{fetch(:rsync_cmd)} ./#{fetch(:packs_dir)}/ #{user}@#{server}:#{release_path}/#{fetch(:packs_dir)}/"  #TODO: Check if exists      
-        run_locally "#{fetch(:rsync_cmd)} ./#{local_manifest_path} #{user}@#{server}:#{release_path}/assets_manifest#{File.extname(local_manifest_path)}"
+      on roles(fetch(:assets_role)) do |server|
+        run_locally do
+          execute "#{fetch(:rsync_cmd)} ./#{fetch(:assets_dir)}/ #{server.user}@#{server.hostname}:#{release_path}/#{fetch(:assets_dir)}/" if Dir.exists?(fetch(:assets_dir))
+          execute "#{fetch(:rsync_cmd)} ./#{fetch(:packs_dir)}/ #{server.user}@#{server.hostname}:#{release_path}/#{fetch(:packs_dir)}/" if Dir.exists?(fetch(:packs_dir))
+        end
       end
     end
   end

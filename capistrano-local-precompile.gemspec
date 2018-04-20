@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |gem|
   gem.name        = 'capistrano-local-precompile'
-  gem.version     = '1.1.0'
+  gem.version     = '1.1.1'
   gem.homepage    = 'https://github.com/spagalloco/capistrano-local-precompile'
 
   gem.author      = "Steve Agalloco, Tom Caflisch"
