@@ -32,6 +32,7 @@ namespace :deploy do
       run_locally do
         with rails_env: fetch(:precompile_env) do
           execute "rm -rf", fetch(:assets_dir)
+          execute "rm -rf", fetch(:packs_dir)
         end
       end
     end
