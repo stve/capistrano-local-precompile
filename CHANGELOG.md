@@ -1,9 +1,13 @@
-# 1.1.2 / 2018-07-02
+# 1.1.3 / 2018-07-02
 ## Removed
 - Rails capistrano assets dependency
 
+# 1.1.2 / 2018-05-31
+## Added
+- Cleanup packs directory when complete
+
 # 1.1.1 / 2018-04-21
-## Added 
+## Added
 - Support for capistrano 3.8+
 
 # 1.1.0 / 2017-09-18
