@@ -1,3 +1,11 @@
+# 1.1.2 / 2018-07-02
+## Removed
+- Rails capistrano assets dependency
+
+# 1.1.1 / 2018-04-21
+## Added 
+- Support for capistrano 3.8+
+
 # 1.1.0 / 2017-09-18
 ## Added
 - Support for [Webpacker](https://github.com/rails/webpacker ) gem
