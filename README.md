@@ -21,6 +21,12 @@ Then add the following line to your `Capfile`:
 require 'capistrano/local_precompile'
 ```
 
+Remove the following line from your `Capfile`:
+
+```ruby
+require 'capistrano/rails/assets'
+```
+
 Here's the full set of configurable options:
 
 ```ruby
