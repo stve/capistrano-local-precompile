@@ -2,7 +2,7 @@ namespace :load do
   task :defaults do
     set :precompile_env,   fetch(:rails_env) || 'production'
     set :assets_dir,       "public/assets"
-    set :packs_dir,        "public/packs"    
+    set :packs_dir,        "public/packs"
     set :rsync_cmd,        "rsync -av --delete"
     set :assets_role,      "web"
 
@@ -18,8 +18,8 @@ namespace :deploy do
     task :cleanup do
       run_locally do
         with rails_env: fetch(:precompile_env) do
-          execute "rm -rf", fetch(:assets_dir)
-          execute "rm -rf", fetch(:packs_dir)
+          execute "rm", "-rf", fetch(:assets_dir)
+          execute "rm", "-rf", fetch(:packs_dir)
         end
       end
     end
