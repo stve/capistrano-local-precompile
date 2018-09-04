@@ -1,3 +1,7 @@
+# 1.1.4 / 2018-09-04
+## Fixed
+- 2nd argument being ignored on OSX
+
 # 1.1.3 / 2018-07-02
 ## Removed
 - Rails capistrano assets dependency
