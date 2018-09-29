@@ -1,3 +1,8 @@
+### unreleased:
+
+- Enable configuration of `:assets_release_path` so that it can easily
+  be changed to `:shared_path` or similar
+
 # 1.1.4 / 2018-09-04
 ## Fixed
 - 2nd argument being ignored on OSX
