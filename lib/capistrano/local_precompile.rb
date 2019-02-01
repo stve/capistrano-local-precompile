@@ -1,6 +1,5 @@
 namespace :load do
   task :defaults do
-    set :precompile_env,   fetch(:rails_env) || 'production'
     set :assets_dir,       "public/assets"
     set :packs_dir,        "public/packs"
     set :rsync_cmd,        "rsync -av --delete"
@@ -25,7 +24,8 @@ namespace :deploy do
     desc "Actually precompile the assets locally"
     task :prepare do
       run_locally do
-        with rails_env: fetch(:precompile_env) do
+        precompile_env = fetch(:precompile_env) || fetch(:rails_env) || 'production'
+        with rails_env: precompile_env do
           execute "rake", "assets:clean"
           execute "rake", "assets:precompile"
         end
