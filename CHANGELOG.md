@@ -1,3 +1,15 @@
+# 1.2.0 / 2019-02-19
+## Added
+- `dry-run` flag
+
+# 1.1.5 / 2019-02-04
+## Fixed
+- Fetching precompile env
+
+## Added
+- ssh port to rsync command
+- rsync parallel execution
+
 # 1.1.4 / 2018-09-04
 ## Fixed
 - 2nd argument being ignored on OSX

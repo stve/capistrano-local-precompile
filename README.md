@@ -10,8 +10,8 @@ Add capistrano-local-precompile to your Gemfile:
 group :development do
   # Capistrano v2 should use '~> 0.0.5'
   # Capistrano v3 should use '~> 1.0.0'
-  # Capistrano v3.8+ should use '~> 1.1.3'
-  gem 'capistrano-local-precompile', '~> 1.1.3', require: false
+  # Capistrano v3.8+ should use '~> 1.2.0'
+  gem 'capistrano-local-precompile', '~> 1.2.0', require: false
 end
 ```
 
@@ -54,4 +54,4 @@ Pull requests welcome: fork, make a topic branch, commit (squash when possible) 
 
 ## Copyright
 
-Copyright (c) 2017 Steve Agalloco / Tom Caflisch. See [LICENSE](LICENSE.md) for detail
+Copyright (c) 2019 Steve Agalloco / Tom Caflisch. See [LICENSE](LICENSE.md) for detail
