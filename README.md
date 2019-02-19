@@ -35,6 +35,12 @@ set :assets_dir                 # default: "public/assets"
 set :rsync_cmd                  # default: "rsync -av --delete"
 ```
 
+Capistrano supports 'dry run' mode. In that case `rsync` command will not actually runned but only showed in stdout:
+
+```
+cap production deploy --dry-run
+```
+
 ## Acknowledgement
 
 This gem is derived from gists by [uhlenbrock][] and [keighl][].
